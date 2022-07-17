@@ -1,0 +1,5 @@
+{
+	"editor.wordWrapColumn": 20,
+	"html.format.wrapAttributes": "force-expand-multiline",
+	"html.format.wrapAttributesIndentSize": 20
+}
