@@ -1,31 +1,38 @@
 @import '../variables';
 
 .categories {
-  ul {
-    display: flex;
+	width: 100%;
 
-    li {
-      background-color: #f9f9f9;
-      padding: 13px 30px;
-      border-radius: 30px;
-      margin-right: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.1s ease-in-out;
-      @include noselect();
+	ul {
+		display: flex;
+		gap: 20px;
+		flex-wrap: wrap;
+		@media (max-width: 1424px) {
+			justify-content: center;
+		}
 
-      &:hover {
-        background-color: darken(#f9f9f9, 2%);
-      }
+		li {
+			background-color: #f9f9f9;
+			padding: 13px 30px;
+			border-radius: 30px;
+			margin-right: 10px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: background-color 0.1s ease-in-out;
+			@include noselect();
 
-      &:active {
-        background-color: darken(#f9f9f9, 5%);
-      }
+			&:hover {
+				background-color: darken(#f9f9f9, 2%);
+			}
 
-      &.active {
-        background-color: #282828;
-        color: #fff;
-      }
-    }
-  }
+			&:active {
+				background-color: darken(#f9f9f9, 5%);
+			}
+
+			&.active {
+				background-color: #282828;
+				color: #fff;
+			}
+		}
+	}
 }
