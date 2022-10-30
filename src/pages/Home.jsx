@@ -8,10 +8,15 @@ import Skeleton from '../components/PizzaBlock/Skeleton.jsx';
 function Home() {
 	const [items, setItem] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState(true);
+	// Выбор категории
+	const [categoryId, setCategoryId] = React.useState(0);
+	// Выбор сортировки
+	const [sortType, setSortType] = React.useState(0);
 
 	React.useEffect(() => {
+		setIsLoading(true);
 		// Получаем пиццы с сервера
-		fetch('https://635a8f9a38725a1746ca0088.mockapi.io/items')
+		fetch('https://635a8f9a38725a1746ca0088.mockapi.io/items?category=' + categoryId)
 			.then((res) => {
 				return res.json();
 			})
@@ -21,17 +26,17 @@ function Home() {
 				setIsLoading(false);
 			});
 		window.scrollTo(0, 0);
-	}, []);
+	}, [categoryId]);
 	return (
 		<div className='container'>
 			<div className='content__top'>
-				<Categories />
+				<Categories value={categoryId} onClickCategory={(i) => setCategoryId(i)} />
 				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
 			<div className='content__items'>
 				{isLoading
-					? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
+					? [...new Array(8)].map((_, index) => <Skeleton key={index} />)
 					: items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
 			</div>
 		</div>
