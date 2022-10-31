@@ -5,7 +5,7 @@ import Categories from '../components/Categories';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton.jsx';
 
-function Home() {
+function Home({ searchValue }) {
 	const [items, setItem] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState(true);
 	// Выбор категории
@@ -36,6 +36,17 @@ function Home() {
 			});
 		window.scrollTo(0, 0);
 	}, [categoryId, sortType]);
+
+	const pizzas = items
+		.filter((obj) => {
+			if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
+				return true;
+			}
+
+			return false;
+		})
+		.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+	const skeletons = [...new Array(8)].map((_, index) => <Skeleton key={index} />);
 	return (
 		<div className='container'>
 			<div className='content__top'>
@@ -43,11 +54,7 @@ function Home() {
 				<Sort value={sortType} onChangeSort={(i) => setSortType(i)} />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<div className='content__items'>
-				{isLoading
-					? [...new Array(8)].map((_, index) => <Skeleton key={index} />)
-					: items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
-			</div>
+			<div className='content__items'>{isLoading ? skeletons : pizzas}</div>
 		</div>
 	);
 }

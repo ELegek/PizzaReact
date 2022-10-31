@@ -12,10 +12,20 @@
 	width: 100%;
 	border: none;
 	font-size: 18px;
-	color: rgb(151, 150, 150);
+	color: #333;
 }
 
 .icon {
 	font-size: 22px;
 	opacity: 0.2;
+}
+
+.clearIcon {
+	font-size: 22px;
+	opacity: 0.2;
+
+	&:hover {
+		opacity: 0.8;
+		cursor: pointer;
+	}
 }

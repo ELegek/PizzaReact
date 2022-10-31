@@ -4,12 +4,19 @@ import React from 'react';
 import styles from './Search.module.scss';
 // Иконки
 import { FaSearch } from 'react-icons/fa';
+import { GrClose } from 'react-icons/gr';
 
-function Search() {
+function Search({ searchValue, setSearchValue }) {
 	return (
 		<div className={styles.root}>
 			<FaSearch className={styles.icon} />
-			<input className={styles.input} placeholder='Search...' />
+			<input
+				value={searchValue}
+				onChange={(event) => setSearchValue(event.target.value)}
+				className={styles.input}
+				placeholder='Search...'
+			/>
+			{searchValue && <GrClose onClick={() => setSearchValue('')} className={styles.clearIcon} />}
 		</div>
 	);
 }
