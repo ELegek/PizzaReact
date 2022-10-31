@@ -22,9 +22,10 @@ function Home({ searchValue }) {
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const sortBy = sortType.sortProperty.replace('-', '');
 		const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+		const search = searchValue ? `&search=${searchValue}` : '';
 
 		fetch(
-			`https://635a8f9a38725a1746ca0088.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`,
+			`https://635a8f9a38725a1746ca0088.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`,
 		)
 			.then((res) => {
 				return res.json();
@@ -35,17 +36,9 @@ function Home({ searchValue }) {
 				setIsLoading(false);
 			});
 		window.scrollTo(0, 0);
-	}, [categoryId, sortType]);
+	}, [categoryId, sortType, searchValue]);
 
-	const pizzas = items
-		.filter((obj) => {
-			if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
-				return true;
-			}
-
-			return false;
-		})
-		.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+	const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
 	const skeletons = [...new Array(8)].map((_, index) => <Skeleton key={index} />);
 	return (
 		<div className='container'>
