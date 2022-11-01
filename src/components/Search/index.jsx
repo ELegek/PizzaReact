@@ -5,8 +5,11 @@ import styles from './Search.module.scss';
 // Иконки
 import { FaSearch } from 'react-icons/fa';
 import { GrClose } from 'react-icons/gr';
+import { SearchContext } from '../../App';
 
-function Search({ searchValue, setSearchValue }) {
+function Search() {
+	const { searchValue, setSearchValue } = React.useContext(SearchContext);
+
 	return (
 		<div className={styles.root}>
 			<FaSearch className={styles.icon} />
