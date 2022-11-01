@@ -5,8 +5,10 @@ import Categories from '../components/Categories';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton.jsx';
 import Pagination from '../components/Pagination';
+import { SearchContext } from '../App';
 
-function Home({ searchValue }) {
+function Home() {
+	const { searchValue } = React.useContext(SearchContext);
 	const [items, setItem] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState(true);
 	// Выбор категории
