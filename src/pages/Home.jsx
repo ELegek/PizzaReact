@@ -1,10 +1,11 @@
 import React from 'react';
-import axios from 'axios';
+
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
-
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategoryId, setCurrentPage, setFilters } from '../redux//slices/filterSlice.js';
+
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice.js';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
 
 import Sort, { sortList } from '../components/Sort';
 import Categories from '../components/Categories';
@@ -18,12 +19,11 @@ function Home() {
 	const dispatch = useDispatch();
 	const isSearch = React.useRef(false);
 	const isMounted = React.useRef(false);
-
+	const { items, status } = useSelector((state) => state.pizza);
 	const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
 
 	const { searchValue } = React.useContext(SearchContext);
-	const [items, setItems] = React.useState([]);
-	const [isLoading, setIsLoading] = React.useState(true);
+
 	// Выбор сортировки
 
 	const onChangeCategory = (id) => {
@@ -34,25 +34,22 @@ function Home() {
 		dispatch(setCurrentPage(number));
 	};
 
-	const fetchPizzas = async () => {
-		setIsLoading(true);
+	const getPizzas = async () => {
 		// Получаем пиццы с сервера
 		const sortBy = sort.sortProperty.replace('-', '');
 		const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&search=${searchValue}` : '';
 
-		try {
-			const res = await axios.get(
-				`https://635a8f9a38725a1746ca0088.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-			);
-			setItems(res.data);
-		} catch (error) {
-			alert('Ошибка при получении пицц');
-			console.log('ERROR', error);
-		} finally {
-			setIsLoading(false);
-		}
+		dispatch(
+			fetchPizzas({
+				sortBy,
+				order,
+				category,
+				search,
+				currentPage,
+			}),
+		);
 
 		window.scrollTo(0, 0);
 	};
@@ -90,13 +87,7 @@ function Home() {
 
 	// Если был первый рендер, то запрашиваем пиццы
 	React.useEffect(() => {
-		window.scrollTo(0, 0);
-
-		if (!isSearch.current) {
-			fetchPizzas();
-		}
-
-		isSearch.current = false;
+		getPizzas();
 	}, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
 	const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
@@ -108,7 +99,7 @@ function Home() {
 				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+			<div className='content__items'>{status === 'loading' ? skeletons : pizzas}</div>
 			<Pagination currentPage={currentPage} onChangePage={onChangePage} />
 		</div>
 	);
